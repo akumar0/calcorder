@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Generate Court Order</h2>
+
+<p id="demo"></p>
+
+<!-- button type="button" onclick="myFunction()">Try it</button-->
+<p></p>
+
+<script>
+function myFunction() {
+  document.getElementById("demo").innerHTML = "Paragraph changed.";
+}
+
+function build() {
+  var remaining = [ 1, 2, 3, 4, 5, 6, 7 ],
+      res = [],
+      candidate,
+      n, sz, sel;
+
+  for(n = 0; n < 7; n++) {
+    candidate = remaining.filter(function(v) {
+      return v != n + 1 && (!n || Math.abs(res[n - 1] - v) != 1);
+    });
+    if(!(sz = candidate.length)) {
+      return false;
+    }
+    res.push(sel = candidate[(Math.random() * sz) | 0]);
+    remaining.splice(remaining.indexOf(sel), 1);
+  }
+  return res;
+}
+
+//while((list = build()) === false) {};
+//document.write(list.join(' '));
+
+/* Randomize array in-place using Durstenfeld shuffle algorithm */
+function randomize(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+function calcOrder() {
+    var courts = [], c, n, i;
+    for (c=0; c < 3; ++c) {
+        courts.push([]);
+    }
+
+    var leftover = [];
+    for (n=0; n < 3; ++n) {
+        var p = [1,2,3,4];
+        var res = randomize(p);
+        //document.write("res=" + res.join(' '));
+        for (i=0; i < 3; ++i) {
+            courts[i].push(res[i] + n*4);
+        }
+        leftover.push(res[3] + n*4);
+    }
+    var res1 = randomize(leftover);
+    var resString = "";
+    for (n=0; n <3; ++n) {
+        courts[n].push(res1[n]);
+        resString += "Court " + (n+1) + ": " + courts[n].join(' ');
+        resString += " ";
+    }
+    return courts;
+}
+var courts = calcOrder();
+
+function tableCreate(courts) {
+  const body = document.body,
+        tbl = document.createElement('table');
+  tbl.style.width = '150px';
+  tbl.style.border = '1px solid black';
+
+  for (let i = 0; i < 4; i++) {
+    const tr = tbl.insertRow();
+    for (let j = 0; j < 5; j++) {
+        const td = tr.insertCell();
+        let textValue = "";
+        if (i ==0) {
+            if (j == 0)
+                textValue = "Court#";
+            else
+                textValue = "Player#" ;
+        } else {
+            if (j == 0)
+                textValue = "" + (i);
+            else
+                textValue = "" + courts[i-1][j-1];
+        }
+        
+        td.appendChild(document.createTextNode(textValue));
+        td.style.border = '1px solid black';
+    }
+  }
+  body.appendChild(tbl);
+
+  document.write("Courts=" + courts);
+}
+
+tableCreate(courts);
+</script>
+
+</body>
+</html> 

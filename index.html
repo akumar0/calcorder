@@ -29,6 +29,7 @@
 
 <p id="demo"><u>Note: Players 1-4 come from Court 1, 5-8 from Court 2 and 9-12 from Court 3.</u></p>
 
+
 <!-- button type="button" onclick="myFunction()">Try it</button-->
 <p></p>
 
@@ -71,9 +72,10 @@ function randomize(array) {
 }
 
 function calcOrder() {
-    var courts = [], c, n, i;
+    var courts = [], c, n, i, courtsRes = [];
     for (c=0; c < 3; ++c) {
         courts.push([]);
+        courtsRes.push([]);
     }
 
     var leftover = [];
@@ -92,9 +94,12 @@ function calcOrder() {
         courts[n].push(res1[n]);
         resString += "Court " + (n+1) + ": " + courts[n].join(' ');
         resString += " ";
+        let ind = Math.floor((res1[n]-1) /4);
+        courtsRes[ind] = courts[n].sort(function(a, b) {return a - b;});
     }
-    return courts;
+    return courtsRes;
 }
+//Math.seed = 6;
 var courts = calcOrder();
 
 function tableCreate(courts) {
@@ -152,9 +157,18 @@ function tableCreate1(courts) {
 
   //document.write("Courts=" + courts);
 }
+
+function refresh(){
+      window.location.reload("Refresh")
+    }
+
 //tableCreate(courts);
 tableCreate1(courts);
 </script>
+
+<p><input type="button" value="Regenerate" onClick="refresh(this)"></p>
+<!--a href="javascript:location.reload(true)">Refresh this page</a>
+<p></p-->
 
 </body>
 </html> 

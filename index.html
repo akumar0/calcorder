@@ -1,10 +1,31 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <style>
+    table, td, th {
+      border: 1px solid black;
+    }
+    
+    table {
+      border-collapse: collapse;
+      width: 50%;
+    }
+
+    table td {
+      background-color: #57a7dd;
+      color: white;
+    }    
+
+    body {
+      background-color: rgb(200,255,255);
+    }    
+    </style>
+    </head>
 <body>
 
-<h2>Generate Court Order</h2>
+<h1>Generate Court Order for Next Round</h1>
 
-<p id="demo"></p>
+<p id="demo"><u>Note: Players 1-4 come from Court 1, 5-8 from Court 2 and 9-12 from Court 3.</u></p>
 
 <!-- button type="button" onclick="myFunction()">Try it</button-->
 <p></p>
@@ -77,8 +98,6 @@ var courts = calcOrder();
 function tableCreate(courts) {
   const body = document.body,
         tbl = document.createElement('table');
-  tbl.style.width = '150px';
-  tbl.style.border = '1px solid black';
 
   for (let i = 0; i < 4; i++) {
     const tr = tbl.insertRow();
@@ -98,7 +117,7 @@ function tableCreate(courts) {
         }
         
         td.appendChild(document.createTextNode(textValue));
-        td.style.border = '1px solid black';
+        //td.style.border = '1px solid black';
     }
   }
   body.appendChild(tbl);

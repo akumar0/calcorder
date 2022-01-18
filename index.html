@@ -14,6 +14,7 @@
     table td {
       background-color: #57a7dd;
       color: white;
+      font-size: 30px;
     }    
 
     body {
@@ -125,7 +126,33 @@ function tableCreate(courts) {
   //document.write("Courts=" + courts);
 }
 
-tableCreate(courts);
+
+
+function tableCreate1(courts) {
+  const body = document.body,
+        tbl = document.createElement('table');
+
+  for (let i = 0; i < 5; i++) {
+    const tr = tbl.insertRow();
+    for (let j = 0; j < 3; j++) {
+        const td = tr.insertCell();
+        let textValue = "";
+        if (i ==0) {
+          textValue = "Court " + (j+1);
+        } else {
+          textValue = "" + courts[j][i-1];
+        }
+        
+        td.appendChild(document.createTextNode(textValue));
+        //td.style.border = '1px solid black';
+    }
+  }
+  body.appendChild(tbl);
+
+  //document.write("Courts=" + courts);
+}
+//tableCreate(courts);
+tableCreate1(courts);
 </script>
 
 </body>

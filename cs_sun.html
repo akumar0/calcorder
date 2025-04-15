@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Court Selector</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: rgb(200,255,255); }
+    .group { margin-top: 20px; }
+    .group h3 { margin-bottom: 5px; }
+    .input-field { margin-bottom: 5px; }
+    .container {
+      display: flex;
+      gap: 40px;
+    }
+    .list-box {
+      flex: 1;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 8px;
+      margin: 4px 0;
+      background: #f0f0f0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    li:hover {
+      background-color: #e0e0e0;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
+    pre {
+      background: #272727;
+      color: #00ff66;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    button { margin-top: 10px; }
+    table, td, th {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Court Selector</h1>
+  <h1>Pick 4 players any order from same court</h1>
+
+  <div class="container">
+    <!-- Left List -->
+    <div class="list-box">
+      <h2>Available Items</h2>
+      <ul id="availableList">
+        <li onclick="addItem(this)">Amit</li>
+        <li onclick="addItem(this)">Anil</li>
+        <li onclick="addItem(this)">Harminder</li>
+        <li onclick="addItem(this)">Jitu</li>
+        <li onclick="addItem(this)">Madhu</li>
+        <li onclick="addItem(this)">Navneet</li>
+        <li onclick="addItem(this)">Nilesh</li>
+        <li onclick="addItem(this)">Nitin</li>
+        <li onclick="addItem(this)">Parag</li>
+        <li onclick="addItem(this)">Parth</li>
+        <li onclick="addItem(this)">Rajesh</li>
+        <li onclick="addItem(this)">Radha</li>
+        <li onclick="addItem(this)">Ravi</li>
+        <li onclick="addItem(this)">Ravinder</li>
+        <li onclick="addItem(this)">Shankar</li>
+        <li onclick="addItem(this)">Vineet</li>
+      </ul>
+    </div>
+
+    <!-- Right List -->
+    <div class="list-box">
+      <h2>Selected Items</h2>
+      <ul id="selectedList"></ul>
+
+      <!--h3>JavaScript Array:</h3>
+      <pre id="arrayDisplay">[]</pre-->
+    </div>
+  </div>
+  <button onclick="distributeGroups()">Distribute to Groups</button>
+
+  <!--
+  <div class="group" id="group1a"><h3>Court 1</h3><ul></ul></div>
+  <div class="group" id="group2a"><h3>Court 2</h3><ul></ul></div>
+  <div class="group" id="group3a"><h3>Court 3</h3><ul></ul></div>
+   -->
+
+  <table>
+    <tr>
+        <td><div class="group" id="group1"><h3>Court 1</h3><ul></ul></div></td>
+        <td><div class="group" id="group2"><h3>Court 2</h3><ul></ul></div></td>
+        <td><div class="group" id="group3"><h3>Court 3</h3><ul></ul></div></td>
+    </tr>
+ </table>
+
+  <script>
+
+    const selectedArray = [];
+
+    function addItem(element) {
+        const value = element.textContent;
+
+        if (!selectedArray.includes(value)) {
+            selectedArray.push(value);
+
+            // Add to selected list UI
+            const li = document.createElement("li");
+            li.textContent = value;
+            document.getElementById("selectedList").appendChild(li);
+
+            // Update display
+            //document.getElementById("arrayDisplay").textContent = JSON.stringify(selectedArray, null, 2);
+
+            // Disable or gray out selected item
+            element.style.pointerEvents = 'none';
+            element.style.opacity = '0.5';
+        }
+    }
+
+    function randomize(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
+
+    function calcOrder(courtsTotal) {
+        var courts = [], c, n, i, courtsRes = [];
+        for (c=0; c < courtsTotal; ++c) {
+            courts.push([]);
+            courtsRes.push([]);
+        }
+
+        if (3 == courtsTotal){
+        var leftover = [];
+        for (n=0; n < 3; ++n) {
+            var p = [1,2,3,4];
+            var res = randomize(p);
+            //document.write("res=" + res.join(' '));
+            for (i=0; i < 3; ++i) {
+                courts[i].push(res[i] + n*4);
+            }
+            leftover.push(res[3] + n*4);
+        }
+        var res1 = randomize(leftover);
+        var resString = "";
+        for (n=0; n <3; ++n) {
+            courts[n].push(res1[n]);
+            resString += "Court " + (n+1) + ": " + courts[n].join(' ');
+            resString += " ";
+            let ind = Math.floor((res1[n]-1) /4);
+            courtsRes[ind] = courts[n].sort(function(a, b) {return a - b;});
+        }
+        } else if (2 == courtsTotal) {
+        for (n=0; n < 2; ++n) {
+            var p = [1,2,3,4];
+            var res = randomize(p);
+            //document.write("res=" + res.join(' '));
+            for (i=0; i < 2; ++i) {
+                courts[i].push(res[i*2] + 4*n);
+                courts[i].push(res[i*2 +1] + 4*n);
+            }
+        }
+        for (n=0; n<2; ++n) {
+            courtsRes[n] = courts[n].sort(function(a, b) {return a - b;});
+        }
+
+        } else {
+        // not implemented for more courts yet
+        document.write("Not implemented for court count =" + courtsTotal);
+        }
+        return courtsRes;
+    }
+
+    function distributeGroups() {
+
+      var courtCount = 3;
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      if (urlParams.has('count')) {
+        const count = parseInt(urlParams.get('count'));
+        if (!isNaN(count)) {
+          courtCount = count;
+        }
+      }
+
+      // Collect inputs
+      let inputs = selectedArray;
+      /*for (let i = 1; i <= 12; i++) {
+        let value = document.getElementById(`input${i}`).value.trim();
+        if (value) inputs.push(value);
+      }*/
+
+      if ((inputs.length !== 12) && (inputs.length !==8)) {
+        alert("Please fill in 8 or 12 inputs.");
+        return;
+      }
+      courtCount = inputs.length /4;
+
+      // Shuffle inputs
+      //inputs.sort(() => Math.random() - 0.5);
+      var courts = calcOrder(courtCount);
+
+      // Clear previous groups
+      for (let g = 1; g <= 3; g++) {
+        document.querySelector(`#group${g} ul`).innerHTML = "";
+        //document.querySelector(`#group${groupNum} h3`).innerHTML = "";
+      }
+
+      // Distribute to groups
+      /*
+      for (let i = 0; i < inputs.length; i++) {
+        const groupNum = (i % 3) + 1;
+        const li = document.createElement("li");
+        li.textContent = inputs[i];
+        document.querySelector(`#group${groupNum} ul`).appendChild(li);
+      }
+      */
+     for (let i=0; i <courtCount; i++) {
+        const groupNum = i+1;
+        //document.querySelector(`#group${groupNum} h3`).innerHTML = "Court ${groupNum}"
+        for (let j=0; j <4; ++j) {
+            const li = document.createElement("li");
+            li.textContent = inputs[courts[i][j]-1];
+            document.querySelector(`#group${groupNum} ul`).appendChild(li);
+        }
+     }
+    }
+  </script>
+<p></p>
+<!--a href="./courtselect.html?count=2">2 players</a>
+<a href="./courtselect.html?count=3">3 players</a>
+<a href="./index.html?count=2">2 players</a>
+<a href="./index.html?count=3">3 players</a-->
+<!--a href="javascript:location.reload(true)">Refresh this page</a-->
+
+</body>
+</html>
+

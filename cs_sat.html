@@ -89,7 +89,7 @@
     <tr>
         <td><div class="group" id="group1"><h3>Court 1</h3><ul></ul></div></td>
         <td><div class="group" id="group2"><h3>Court 2</h3><ul></ul></div></td>
-        <td><div class="group" id="group3"><h3>Court 3</h3><ul></ul></div></td>
+        <!--td><div class="group" id="group3"><h3>Court 3</h3><ul></ul></div></td-->
     </tr>
  </table>
 
@@ -205,7 +205,7 @@
       var courts = calcOrder(courtCount);
 
       // Clear previous groups
-      for (let g = 1; g <= 3; g++) {
+      for (let g = 1; g <= courtCount; g++) {
         document.querySelector(`#group${g} ul`).innerHTML = "";
         //document.querySelector(`#group${groupNum} h3`).innerHTML = "";
       }

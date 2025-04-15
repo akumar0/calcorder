@@ -82,7 +82,8 @@
       <pre id="arrayDisplay">[]</pre-->
     </div>
   </div>
-  <button onclick="distributeGroups()">Distribute to Groups</button>
+  <button onclick="distributeGroups(false)">Distribute Second Hour</button>
+  <button onclick="distributeGroups(true)">Randomize</button>
 
   <!--
   <div class="group" id="group1a"><h3>Court 1</h3><ul></ul></div>
@@ -180,7 +181,7 @@
         return courtsRes;
     }
 
-    function distributeGroups() {
+    function distributeGroups(randomSelect) {
 
       var courtCount = 3;
       const queryString = window.location.search;
@@ -208,6 +209,9 @@
       // Shuffle inputs
       //inputs.sort(() => Math.random() - 0.5);
       var courts = calcOrder(courtCount);
+      if (randomSelect) {
+        inputs = randomize(inputs);
+      }
 
       // Clear previous groups
       for (let g = 1; g <= 3; g++) {
@@ -229,7 +233,11 @@
         //document.querySelector(`#group${groupNum} h3`).innerHTML = "Court ${groupNum}"
         for (let j=0; j <4; ++j) {
             const li = document.createElement("li");
-            li.textContent = inputs[courts[i][j]-1];
+            if (randomSelect) {
+              li.textContent = inputs[i*4 + j];
+            } else {
+              li.textContent = inputs[courts[i][j]-1];
+            }
             document.querySelector(`#group${groupNum} ul`).appendChild(li);
         }
      }
